@@ -11,13 +11,16 @@ app.options('*', cors());
 require('dotenv/config');
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
+app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 //router import
 const categoriesRouter = require('./routes/categories');
+const poemsRouter = require('./routes/poems');
 
 //router mounting
 const api = process.env.API_URL;
 app.use(`${api}/categories`, categoriesRouter);
+app.use(`${api}/poems`, poemsRouter);
 
 //listenings
 mongoose.connect(process.env.MONGODB_URI, {

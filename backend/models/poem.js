@@ -14,7 +14,7 @@ const poemSchema = mongoose.Schema({
     ref: 'Line',
     required: true
   }],
-  art: {
+  image: {
     type: String,
   },
   link: {

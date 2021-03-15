@@ -12,9 +12,12 @@ require('dotenv/config');
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
-//need routes here
-const api = process.env.API_URL;
+//router import
+const categoriesRouter = require('./routes/categories');
 
+//router mounting
+const api = process.env.API_URL;
+app.use(`${api}/categories`, categoriesRouter);
 
 //listenings
 mongoose.connect(process.env.MONGODB_URI, {

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const errorHandler = require('./helpers/error-handler');
 
 //middleware
 app.use(cors());
@@ -12,6 +13,7 @@ require('dotenv/config');
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
+app.use(errorHandler);
 
 //router import
 const categoriesRouter = require('./routes/categories');

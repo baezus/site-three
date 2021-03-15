@@ -4,10 +4,9 @@ const { Category } = require('../models/category');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-
-
 //MULTER config and storage set up
 const multer = require('multer');
+const { Line } = require('../models/line');
 let filter = {};
 const FILE_TYPE_MAP = {
   'image/png': 'png',
@@ -56,21 +55,31 @@ router.get('/:id', async (req, res) => {
 router.post('/', uploadOptions.single('image'), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).send('No image in the request.');
-
   const fileName = req.file.filename;
   const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+
+  const lineItemIds = 
+    Promise.all(req.body.lines
+    .map(async line_item => {
+      let newLineItem = new Line({
+        whichLine: line_item.whichLine,
+        content: line_item.content,
+        parentPoem: line_item.parentPoem,
+      })
+      newLineItem = await newLineItem.save();
+    return newLineItem._id;
+  }))
+  const lineItemIdsResolved = await lineItemIds;
   const addedPoem = new Poem ({
     title: req.body.title,
     description: req.body.description,
-    lines: req.body.lines,
+    lines: lineItemIdsResolved,
     image: `${basePath}${fileName}`,
     link: req.body.link,
     publisher: req.body.publisher,
     dateWritten: req.body.dateWritten,
   })
-
   poem = await addedPoem.save();
-
   if (!poem) {
     return res.status(500).send('The poem was not created.');
   }

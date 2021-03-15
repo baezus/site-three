@@ -10,7 +10,7 @@ const poemSchema = mongoose.Schema({
     required: true
   },
   lines: [{
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Line',
     required: true
   }],

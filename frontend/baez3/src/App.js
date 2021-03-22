@@ -1,9 +1,10 @@
 import React from 'react';
+import Splash from './pages/Splash';
 
 function App() {
   return (
     <div className="App">
-      <h1>Hey</h1>
+      <Splash/>
     </div>
   );
 }
